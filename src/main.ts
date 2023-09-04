@@ -1,53 +1,105 @@
-// Array
-let stringArr = ["Rohit", "karn", "Arjun"]
-let guitars = ["start", "les paul", 550];
-let mixedData = ["Mohit", 24, true]
+// Type Aliases
+type stringOrNumber = string | number;
 
-stringArr[0] = "Ashish";
-stringArr.push("hey");
+type stringOrNumberArray = (string | number)[];
 
-guitars[0] = 'bye';
-guitars.unshift('jim')
-
-let test = []
-let bands:string[] = []  // Array of strings values
-bands.push('ha ha ha');
-
-// Tuple
-    let myTuple:[string, number, boolean] = ["Tarun", 27, true]
-
-    let mixed = ["johng", 21, false];
-
-    mixed = myTuple;  // both are equal
-
- // myTuple = mixed;   // not equal
-
-
-// enum
-
-enum Grade {
-    A = 1, 
-    B, 
-    C, 
-    D, 
-    E 
+type Guitarist = {
+    name?: string;
+    active: boolean;
+    albums: (string | number)[];
 }
 
-// type
-type XYZ = {
-    name: string;
-    roll_no: number;
-    isActive: boolean;
+type Guitarist2 = {
+    name?: string;
+    active: boolean;
+    albums: stringOrNumberArray; // type aliase
 }
 
-const myObj1: XYZ ={
-    name: "Ajay",
-    roll_no: 1,
-    isActive: false,
+type userId1 = string | number
+type userId2 = stringOrNumber;   // type aliase
+
+
+// Literal types
+let myName: "Sachin";
+
+let userName: 'Sachin' | "Tarun" | "Ashish"
+
+userName = "Tarun"  // this will work
+// userName = "Rohit"  // this will not work
+
+// functions 
+const add = (a: number, b: number): number => {
+    return a + b
 }
 
-const myObj2: XYZ ={
-    name: "Rahul",
-    roll_no: 2,
-    isActive: true,
+const logMsg = (message: any): void => {
+    console.log(message)
+}
+
+logMsg('Hello!')
+logMsg(add(2, 3))
+
+let subtract = function (c: number, d: number): number {
+    return c - d
+}
+
+type mathFunction = (a: number, b: number) => number
+// interface mathFunction {
+//     (a: number, b: number): number
+// }
+
+let multiply: mathFunction = function (c, d) {
+    return c * d
+}
+
+logMsg(multiply(2, 2))
+
+// optional parameters
+const addAll = (a:number, b:number, c?:number): number => {
+    if(typeof c !== "undefined"){
+        return a + b + c;
+    }
+    return a + b;
+}
+
+// default parameters;
+const sumAll = (a:number = 10, b:number, c:number = 2): number => {
+    return a + b + c;
+}
+
+logMsg(addAll(3, 3, 2));
+logMsg(addAll(2, 3));
+logMsg(sumAll(2, 3));
+logMsg(sumAll(undefined, 3))
+
+// Rest parameter
+const total = (a:number, ...nums:number[]): number => {
+    return a + nums.reduce((prev, cur) => prev + cur);
+}
+
+console.log(logMsg(total(20, 2, 3)))
+
+const createError = (errMsg: string): never => {
+    throw new Error(errMsg)
+}
+
+const infinite = () => {
+    let i: number = 1
+    while (true) {
+        i++
+        if (i > 100) break
+    }
+}
+
+// custom type guard 
+const isNumber = (value: any): boolean => {
+    return typeof value === 'number'
+        ? true : false
+}
+
+// use of the never type 
+const numberOrString = (value: number | string): string => {
+    if (typeof value === 'string') return 'string'
+    if (isNumber(value)) return 'number'
+    return createError('This should never happen!')
 }
